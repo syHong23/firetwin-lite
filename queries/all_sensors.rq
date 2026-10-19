@@ -1,0 +1,6 @@
+# Which elements are SOSA sensors?
+# The building data never says "sosa:Sensor" directly: this works only after
+# OWL reasoning infers it from  SmokeDetector -> FireDetector -> sosa:Sensor.
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+SELECT ?sensor WHERE { ?sensor a sosa:Sensor . }
+ORDER BY ?sensor

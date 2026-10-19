@@ -1,0 +1,8 @@
+# Where are the evacuation exits?
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX ftl:  <https://example.org/firetwin#>
+SELECT ?exitLabel ?spaceLabel WHERE {
+  ?exit a ftl:EvacuationExit ; rdfs:label ?exitLabel ; ftl:exitFrom ?space .
+  ?space rdfs:label ?spaceLabel .
+}
+ORDER BY ?exitLabel

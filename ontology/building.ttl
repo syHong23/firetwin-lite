@@ -1,0 +1,55 @@
+# A small two-storey office building described with BOT + FireTwin-Lite.
+# Room103 deliberately has NO smoke detector, to test the SHACL rule.
+@prefix bot:  <https://w3id.org/bot#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ftl:  <https://example.org/firetwin#> .
+@prefix b:    <https://example.org/firetwin/building#> .
+
+b:Site a bot:Site ; bot:hasBuilding b:B1 .
+b:B1 a bot:Building ; rdfs:label "Office building" ; bot:hasStorey b:S0, b:S1 .
+
+b:S0 a bot:Storey ; rdfs:label "Ground floor" ;
+    bot:hasSpace b:Lobby, b:Room001, b:Room002, b:Corridor0, b:Stair0 .
+b:S1 a bot:Storey ; rdfs:label "First floor" ;
+    bot:hasSpace b:Room101, b:Room102, b:Room103, b:Corridor1, b:Stair1 .
+
+b:CompA a ftl:FireCompartment ; rdfs:label "Compartment A (west)" .
+b:CompB a ftl:FireCompartment ; rdfs:label "Compartment B (east)" .
+
+b:Lobby     a ftl:Room      ; rdfs:label "Lobby"      ; ftl:inCompartment b:CompA .
+b:Room001   a ftl:Room      ; rdfs:label "Room 001"   ; ftl:inCompartment b:CompA .
+b:Room002   a ftl:Room      ; rdfs:label "Room 002"   ; ftl:inCompartment b:CompB .
+b:Corridor0 a ftl:Corridor  ; rdfs:label "Corridor 0" ; ftl:inCompartment b:CompA .
+b:Stair0    a ftl:Stairwell ; rdfs:label "Stairwell (ground)" .
+b:Room101   a ftl:Room      ; rdfs:label "Room 101"   ; ftl:inCompartment b:CompA .
+b:Room102   a ftl:Room      ; rdfs:label "Room 102"   ; ftl:inCompartment b:CompB .
+b:Room103   a ftl:Room      ; rdfs:label "Room 103"   ; ftl:inCompartment b:CompB .
+b:Corridor1 a ftl:Corridor  ; rdfs:label "Corridor 1" ; ftl:inCompartment b:CompB .
+b:Stair1    a ftl:Stairwell ; rdfs:label "Stairwell (first)" .
+
+b:Lobby ftl:connectsTo b:Corridor0 .
+b:Room001 ftl:connectsTo b:Corridor0 .
+b:Room002 ftl:connectsTo b:Corridor0 .
+b:Corridor0 ftl:connectsTo b:Stair0 .
+b:Stair0 ftl:connectsTo b:Stair1 .
+b:Stair1 ftl:connectsTo b:Corridor1 .
+b:Room101 ftl:connectsTo b:Corridor1 .
+b:Room102 ftl:connectsTo b:Corridor1 .
+b:Room103 ftl:connectsTo b:Corridor1 .
+
+b:ExitMain a ftl:EvacuationExit ; rdfs:label "Main exit" ; ftl:exitFrom b:Lobby .
+b:ExitEast a ftl:EvacuationExit ; rdfs:label "East exit" ; ftl:exitFrom b:Corridor0 .
+
+b:Lobby     bot:containsElement b:SD_Lobby, b:MCP_0, b:ExitMain .
+b:Room001   bot:containsElement b:SD_001 .
+b:Room002   bot:containsElement b:SD_002 .
+b:Corridor0 bot:containsElement b:SD_C0, b:ExitEast .
+b:Room101   bot:containsElement b:SD_101 .
+b:Room102   bot:containsElement b:HD_102, b:SD_102 .
+b:Room103   bot:containsElement b:HD_103 .
+b:Corridor1 bot:containsElement b:SD_C1, b:MCP_1 .
+
+b:SD_Lobby a ftl:SmokeDetector . b:SD_001 a ftl:SmokeDetector . b:SD_002 a ftl:SmokeDetector .
+b:SD_C0 a ftl:SmokeDetector .   b:SD_101 a ftl:SmokeDetector . b:SD_102 a ftl:SmokeDetector .
+b:SD_C1 a ftl:SmokeDetector .   b:HD_102 a ftl:HeatDetector .  b:HD_103 a ftl:HeatDetector .
+b:MCP_0 a ftl:ManualCallPoint . b:MCP_1 a ftl:ManualCallPoint .

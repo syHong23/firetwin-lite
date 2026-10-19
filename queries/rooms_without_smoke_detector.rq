@@ -1,0 +1,9 @@
+# Which rooms have no smoke detector?
+PREFIX bot:  <https://w3id.org/bot#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX ftl:  <https://example.org/firetwin#>
+SELECT ?room ?label WHERE {
+  ?room a ftl:Room ; rdfs:label ?label .
+  FILTER NOT EXISTS { ?room bot:containsElement ?d . ?d a ftl:SmokeDetector . }
+}
+ORDER BY ?label

@@ -1,0 +1,10 @@
+# How many fire detectors (smoke or heat) are on each storey?
+PREFIX bot:  <https://w3id.org/bot#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX ftl:  <https://example.org/firetwin#>
+SELECT ?storeyLabel (COUNT(DISTINCT ?d) AS ?detectors) WHERE {
+  ?storey a bot:Storey ; rdfs:label ?storeyLabel ; bot:hasSpace ?space .
+  ?space bot:containsElement ?d .
+  ?d a ?type . VALUES ?type { ftl:SmokeDetector ftl:HeatDetector }
+}
+GROUP BY ?storeyLabel ORDER BY ?storeyLabel

@@ -1,0 +1,32 @@
+# Simplified fire-safety rules written for learning purposes.
+# They are NOT the text of EN 54 or NF S 61-93x (those standards are not reproduced here).
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix bot:  <https://w3id.org/bot#> .
+@prefix ftl:  <https://example.org/firetwin#> .
+@prefix fr:   <https://example.org/firetwin/rules#> .
+
+# Rule 1: every room contains at least one smoke detector.
+fr:RoomHasSmokeDetector a sh:NodeShape ;
+    sh:targetClass ftl:Room ;
+    sh:property [
+        sh:path bot:containsElement ;
+        sh:qualifiedValueShape [ sh:class ftl:SmokeDetector ] ;
+        sh:qualifiedMinCount 1 ;
+        sh:message "Room without a smoke detector." ;
+    ] .
+
+# Rule 2: every storey has at least one manual call point in one of its spaces.
+fr:StoreyHasCallPoint a sh:NodeShape ;
+    sh:targetClass bot:Storey ;
+    sh:property [
+        sh:path ( bot:hasSpace bot:containsElement ) ;
+        sh:qualifiedValueShape [ sh:class ftl:ManualCallPoint ] ;
+        sh:qualifiedMinCount 1 ;
+        sh:message "Storey without a manual call point." ;
+    ] .
+
+# Rule 3: every space belongs to at most one fire compartment.
+fr:SpaceOneCompartment a sh:NodeShape ;
+    sh:targetClass ftl:Room, ftl:Corridor ;
+    sh:property [ sh:path ftl:inCompartment ; sh:maxCount 1 ;
+                  sh:message "Space assigned to several compartments." ] .

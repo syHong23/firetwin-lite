@@ -1,0 +1,40 @@
+# FireTwin-Lite ontology: a small fire-safety vocabulary on top of two standards
+#   BOT  (Building Topology Ontology): sites, buildings, storeys, spaces, elements
+#   SOSA (Sensor, Observation, Sample, Actuator): sensors and observations
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix bot:  <https://w3id.org/bot#> .
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
+@prefix ftl:  <https://example.org/firetwin#> .
+
+ftl: a owl:Ontology ;
+    rdfs:label "FireTwin-Lite fire-safety ontology" .
+
+# ---------- Spaces (all are bot:Space) ----------
+ftl:Room       a owl:Class ; rdfs:subClassOf bot:Space ; rdfs:label "Room" .
+ftl:Corridor   a owl:Class ; rdfs:subClassOf bot:Space ; rdfs:label "Corridor" .
+ftl:Stairwell  a owl:Class ; rdfs:subClassOf bot:Space ; rdfs:label "Stairwell" .
+
+# ---------- Fire compartments (a bot:Zone grouping spaces) ----------
+ftl:FireCompartment a owl:Class ; rdfs:subClassOf bot:Zone ;
+    rdfs:comment "Part of a building separated by fire-resisting construction." .
+
+# ---------- Fire-safety equipment ----------
+ftl:FireSafetyEquipment a owl:Class ; rdfs:subClassOf bot:Element .
+ftl:FireDetector  a owl:Class ; rdfs:subClassOf ftl:FireSafetyEquipment, sosa:Sensor .
+ftl:SmokeDetector a owl:Class ; rdfs:subClassOf ftl:FireDetector .
+ftl:HeatDetector  a owl:Class ; rdfs:subClassOf ftl:FireDetector .
+ftl:ManualCallPoint a owl:Class ; rdfs:subClassOf ftl:FireSafetyEquipment ;
+    rdfs:comment "Push-button alarm activated by occupants." .
+ftl:EvacuationExit a owl:Class ; rdfs:subClassOf bot:Element .
+
+# ---------- Relations ----------
+ftl:connectsTo a owl:ObjectProperty, owl:SymmetricProperty ;
+    rdfs:domain bot:Space ; rdfs:range bot:Space ;
+    rdfs:comment "Two spaces are directly connected (door or opening)." .
+ftl:inCompartment a owl:ObjectProperty ;
+    rdfs:domain bot:Space ; rdfs:range ftl:FireCompartment .
+ftl:exitFrom a owl:ObjectProperty ;
+    rdfs:domain ftl:EvacuationExit ; rdfs:range bot:Space ;
+    rdfs:comment "The space from which this exit leads outside." .
