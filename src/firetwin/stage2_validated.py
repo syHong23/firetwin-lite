@@ -1,4 +1,4 @@
-"""Stage 2, step 3: grounded answers checked by the knowledge graph.
+"""Stage 2, step 3 (v2): grounded answers checked by the knowledge graph.
 
 The LLM answers in JSON with the IDs it refers to. The validator checks the IDs
 with SPARQL. If there are problems, the LLM gets the problems as feedback and
@@ -16,8 +16,9 @@ from firetwin.validate import check
 SYSTEM = """You answer questions about one specific building.
 Use ONLY the facts below. Reply in JSON with two keys:
 "answer": one or two sentences,
-"ids": the list of identifiers (the names in parentheses in the facts, e.g. Room103 or ExitMain)
-of the spaces or exits your answer is about. If the facts do not contain the answer, use "ids": [].
+"ids": the identifiers (the names in parentheses in the facts, e.g. Room103 or ExitMain)
+of exactly the items the question asks for: rooms or spaces, or exits when the question is about exits.
+Do not include compartments, storeys or other context. If nothing matches, use "ids": [].
 
 Facts:
 {facts}"""
@@ -56,7 +57,7 @@ def main() -> None:
         valid_first += not problems
         if problems:
             feedback = ("Your answer was checked against the building data and has errors:\n- "
-                        + "\n- ".join(problems) + "\nCorrect your answer using only the facts.")
+                        + "\n- ".join(problems) + "\nReturn the complete corrected JSON: remove every wrong id and add every missing one.")
             messages += [{"role": "assistant", "content": reply}, {"role": "user", "content": feedback}]
             answer, ids = parse(chat(messages, json_mode=True))
             problems = check(g, ids, query)
