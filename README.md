@@ -7,7 +7,7 @@ The idea: an LLM should not decide alone. Its answers about a building (where ar
 ## Roadmap
 
 - [x] **Stage 1 – Knowledge graph**: fire-safety ontology on top of BOT and SOSA, a two-storey building, SPARQL queries, OWL 2 RL reasoning, six SHACL rules
-- [ ] **Stage 2 – Grounded LLM**: local open-weight LLM (Ollama), knowledge-graph RAG, symbolic validation of answers, evaluation (LLM only vs RAG vs RAG + validation)
+- [x] **Stage 2 – Grounded LLM**: local open-weight LLM (Ollama), grounding in knowledge-graph facts, ontology-aware symbolic validation of answers, evaluation (LLM only vs grounded vs grounded + validated)
 - [ ] **Stage 3 – Agents and platform**: LangGraph agents (evacuation, maintenance), simulated detectors over MQTT, FastAPI, Docker Compose
 
 ## Stage 1: what it does
@@ -41,6 +41,22 @@ The first version of the building was deliberately simple. Rules were then added
 1. Stairwells had no compartment and no detector → modelled as a protected stairwell compartment with smoke detectors (rule 4).
 2. Compartments spanned two storeys → split per storey; the stairwell is kept as a vertical exception (rule 5).
 3. Compartments had no separation → fire doors added and linked to spaces with BOT's `bot:adjacentElement` (rule 6).
+
+## Stage 2: evaluation
+
+30 questions (24 answerable, 6 traps about things that do not exist), three conditions, `llama3.1:8b` via Ollama, temperature 0. An answer is valid when its IDs exactly match the IDs returned by SPARQL. Run with `python -m firetwin.evaluate`; results in `docs/eval_summary.md` and `docs/eval_results.csv`.
+
+| Condition | Valid (all) | Valid (answerable) | Valid (traps) | Invented IDs | Wrong IDs | Missing IDs | Mean time (s) |
+|---|---|---|---|---|---|---|---|
+| A. LLM only | 5/30 | 1/24 | 4/6 | 22 | 11 | 48 | 5.2 |
+| B. Grounded | 23/30 | 17/24 | 6/6 | 0 | 7 | 2 | 3.0 |
+| C. Grounded + validated | 27/30 | 21/24 | 6/6 | 0 | 3 | 0 | 3.7 |
+
+**Findings.** Without data, the LLM invented rooms such as "Meeting Room" and "Break Room". Grounding removed all invented entities but meaning errors remained. Ontology-aware validation with one feedback round fixed four more answers at a cost of 0.7 s per question.
+
+**Remaining failures.** Confusing connection or storey with compartment membership (Q01), keeping a wrong item despite an explained correction (Q10), and confusing an exit with a room (Q24). Possible next steps: constrain outputs by ontology type, or let the LLM generate SPARQL instead of answers.
+
+**Limitations.** One model, one run, one feedback round, a small synthetic building; ground truth and facts come from the same knowledge graph.
 
 ## Run
 

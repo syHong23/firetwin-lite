@@ -1,0 +1,91 @@
+id,category,question,condition,ids,valid,invented,wrong,missing,seconds,error
+Q01,compartment,Which spaces are in fire compartment A0?,A. LLM only,,False,0,0,3,11.64,False
+Q01,compartment,Which spaces are in fire compartment A0?,B. Grounded,CompA0 Corridor0 Lobby Room001,False,0,1,0,3.58,False
+Q01,compartment,Which spaces are in fire compartment A0?,C. Grounded + validated,Corridor0 Lobby Room001 Room002,False,0,1,0,6.69,False
+Q02,compartment,Which spaces are in fire compartment B0?,A. LLM only,,False,0,0,1,11.6,False
+Q02,compartment,Which spaces are in fire compartment B0?,B. Grounded,CompB0 Room002,False,0,1,0,2.86,False
+Q02,compartment,Which spaces are in fire compartment B0?,C. Grounded + validated,Room002,True,0,0,0,5.64,False
+Q03,compartment,Which spaces are in fire compartment A1?,A. LLM only,,False,0,0,1,11.67,False
+Q03,compartment,Which spaces are in fire compartment A1?,B. Grounded,Room101,True,0,0,0,3.1,False
+Q03,compartment,Which spaces are in fire compartment A1?,C. Grounded + validated,Room101,True,0,0,0,3.1,False
+Q04,compartment,Which spaces are in fire compartment B1?,A. LLM only,,False,0,0,3,11.63,False
+Q04,compartment,Which spaces are in fire compartment B1?,B. Grounded,Corridor1 Room101 Room102 Room103,False,0,1,0,3.24,False
+Q04,compartment,Which spaces are in fire compartment B1?,C. Grounded + validated,Corridor1 Room102 Room103,True,0,0,0,6.32,False
+Q05,compartment,Which spaces are in the protected stairwell compartment?,A. LLM only,Stairwell1 Stairwell2,False,2,0,2,3.08,False
+Q05,compartment,Which spaces are in the protected stairwell compartment?,B. Grounded,Stair0 Stair1,True,0,0,0,2.98,False
+Q05,compartment,Which spaces are in the protected stairwell compartment?,C. Grounded + validated,Stair0 Stair1,True,0,0,0,2.98,False
+Q06,storey,Which spaces are on the ground floor?,A. LLM only,Reception MainHall MeetingRoom,False,3,0,5,2.97,False
+Q06,storey,Which spaces are on the ground floor?,B. Grounded,Corridor0 Lobby Room001 Room002 Stair0,True,0,0,0,3.44,False
+Q06,storey,Which spaces are on the ground floor?,C. Grounded + validated,Corridor0 Lobby Room001 Room002 Stair0,True,0,0,0,3.44,False
+Q07,detector,Which rooms on the ground floor have no smoke detector?,A. LLM only,MeetingRoom Reception,False,2,0,0,2.95,False
+Q07,detector,Which rooms on the ground floor have no smoke detector?,B. Grounded,,True,0,0,0,3.25,False
+Q07,detector,Which rooms on the ground floor have no smoke detector?,C. Grounded + validated,,True,0,0,0,3.25,False
+Q08,storey,Which spaces are on the first floor?,A. LLM only,,False,0,0,5,11.63,False
+Q08,storey,Which spaces are on the first floor?,B. Grounded,Corridor1 Room101 Room102 Room103 Stair1,True,0,0,0,3.34,False
+Q08,storey,Which spaces are on the first floor?,C. Grounded + validated,Corridor1 Room101 Room102 Room103 Stair1,True,0,0,0,3.34,False
+Q09,detector,Which rooms on the first floor have no smoke detector?,A. LLM only,,False,0,0,1,2.77,False
+Q09,detector,Which rooms on the first floor have no smoke detector?,B. Grounded,Room101,False,0,1,1,2.72,False
+Q09,detector,Which rooms on the first floor have no smoke detector?,C. Grounded + validated,Room103,True,0,0,0,5.5,False
+Q10,detector,Which rooms have no smoke detector?,A. LLM only,,False,0,0,1,2.7,False
+Q10,detector,Which rooms have no smoke detector?,B. Grounded,Room101,False,0,1,1,2.74,False
+Q10,detector,Which rooms have no smoke detector?,C. Grounded + validated,Room101 Room103,False,0,1,0,5.6,False
+Q11,detector,Which spaces contain a heat detector?,A. LLM only,,False,0,0,2,11.66,False
+Q11,detector,Which spaces contain a heat detector?,B. Grounded,Room102 Room103,True,0,0,0,2.9,False
+Q11,detector,Which spaces contain a heat detector?,C. Grounded + validated,Room102 Room103,True,0,0,0,2.9,False
+Q12,detector,Which spaces contain a manual call point?,A. LLM only,Room101 Room102,False,0,2,2,2.92,False
+Q12,detector,Which spaces contain a manual call point?,B. Grounded,Lobby Corridor1,True,0,0,0,2.91,False
+Q12,detector,Which spaces contain a manual call point?,C. Grounded + validated,Lobby Corridor1,True,0,0,0,2.91,False
+Q13,detector,Which corridors contain a smoke detector?,A. LLM only,CorridorNorth CorridorSouth,False,2,0,2,2.86,False
+Q13,detector,Which corridors contain a smoke detector?,B. Grounded,Corridor0 Corridor1,True,0,0,0,2.95,False
+Q13,detector,Which corridors contain a smoke detector?,C. Grounded + validated,Corridor0 Corridor1,True,0,0,0,2.95,False
+Q14,detector,Which stairwells contain a smoke detector?,A. LLM only,StairwellA StairwellB,False,2,0,2,2.91,False
+Q14,detector,Which stairwells contain a smoke detector?,B. Grounded,Stair0 Stair1,True,0,0,0,3.02,False
+Q14,detector,Which stairwells contain a smoke detector?,C. Grounded + validated,Stair0 Stair1,True,0,0,0,3.02,False
+Q15,door,Which spaces does fire door FD_002 separate?,A. LLM only,Office Corridor,False,2,0,2,2.81,False
+Q15,door,Which spaces does fire door FD_002 separate?,B. Grounded,Corridor0 Room002,True,0,0,0,2.96,False
+Q15,door,Which spaces does fire door FD_002 separate?,C. Grounded + validated,Corridor0 Room002,True,0,0,0,2.96,False
+Q16,door,Which spaces does fire door FD_101 separate?,A. LLM only,Room101 Room102,False,0,1,1,2.85,False
+Q16,door,Which spaces does fire door FD_101 separate?,B. Grounded,Room101 Corridor1,True,0,0,0,2.85,False
+Q16,door,Which spaces does fire door FD_101 separate?,C. Grounded + validated,Room101 Corridor1,True,0,0,0,2.85,False
+Q17,door,Which spaces does fire door FD_S0 separate?,A. LLM only,Office Stairwell,False,2,0,2,2.83,False
+Q17,door,Which spaces does fire door FD_S0 separate?,B. Grounded,Corridor0 Stair0,True,0,0,0,2.89,False
+Q17,door,Which spaces does fire door FD_S0 separate?,C. Grounded + validated,Corridor0 Stair0,True,0,0,0,2.89,False
+Q18,door,Which spaces does fire door FD_S1 separate?,A. LLM only,Room101 Room102,False,0,2,2,2.87,False
+Q18,door,Which spaces does fire door FD_S1 separate?,B. Grounded,Corridor1 Stair1,True,0,0,0,2.92,False
+Q18,door,Which spaces does fire door FD_S1 separate?,C. Grounded + validated,Corridor1 Stair1,True,0,0,0,2.92,False
+Q19,connection,Which spaces are directly connected to Corridor 0?,A. LLM only,Room101 Room102,False,0,2,4,2.86,False
+Q19,connection,Which spaces are directly connected to Corridor 0?,B. Grounded,Lobby Room001 Room002 Stair0,True,0,0,0,3.33,False
+Q19,connection,Which spaces are directly connected to Corridor 0?,C. Grounded + validated,Lobby Room001 Room002 Stair0,True,0,0,0,3.33,False
+Q20,connection,Which spaces are directly connected to Corridor 1?,A. LLM only,Room101 Room102,False,0,0,2,2.9,False
+Q20,connection,Which spaces are directly connected to Corridor 1?,B. Grounded,Room101 Room102 Room103 Stair1,True,0,0,0,3.37,False
+Q20,connection,Which spaces are directly connected to Corridor 1?,C. Grounded + validated,Room101 Room102 Room103 Stair1,True,0,0,0,3.37,False
+Q21,connection,Which spaces are directly connected to the first-floor stairwell?,A. LLM only,Reception Meeting Room,False,2,0,2,2.86,False
+Q21,connection,Which spaces are directly connected to the first-floor stairwell?,B. Grounded,Stair1 Corridor1 Stair0,False,0,1,0,3.15,False
+Q21,connection,Which spaces are directly connected to the first-floor stairwell?,C. Grounded + validated,Corridor1 Stair0,True,0,0,0,6.21,False
+Q22,exit,Which evacuation exits does the building have?,A. LLM only,ExitMain ExitEast,True,0,0,0,2.88,False
+Q22,exit,Which evacuation exits does the building have?,B. Grounded,ExitEast ExitMain,True,0,0,0,2.9,False
+Q22,exit,Which evacuation exits does the building have?,C. Grounded + validated,ExitEast ExitMain,True,0,0,0,2.9,False
+Q23,exit,From which spaces can occupants leave the building directly through an exit?,A. LLM only,ExitMain ExitEast ExitWest ExitNorth,False,2,2,2,3.17,False
+Q23,exit,From which spaces can occupants leave the building directly through an exit?,B. Grounded,Corridor0 Lobby,True,0,0,0,3.14,False
+Q23,exit,From which spaces can occupants leave the building directly through an exit?,C. Grounded + validated,Corridor0 Lobby,True,0,0,0,3.14,False
+Q24,exit,Which rooms contain an evacuation exit?,A. LLM only,Room101 Room102,False,0,2,1,2.92,False
+Q24,exit,Which rooms contain an evacuation exit?,B. Grounded,Corridor0 Lobby,False,0,1,0,2.83,False
+Q24,exit,Which rooms contain an evacuation exit?,C. Grounded + validated,Lobby ExitEast,False,0,1,0,5.59,False
+Q25,trap,Can occupants use the elevator to evacuate?,A. LLM only,Elevator,False,1,0,0,2.68,False
+Q25,trap,Can occupants use the elevator to evacuate?,B. Grounded,,True,0,0,0,2.81,False
+Q25,trap,Can occupants use the elevator to evacuate?,C. Grounded + validated,,True,0,0,0,2.81,False
+Q26,trap,Which rooms have a sprinkler?,A. LLM only,,True,0,0,0,11.65,False
+Q26,trap,Which rooms have a sprinkler?,B. Grounded,,True,0,0,0,2.68,False
+Q26,trap,Which rooms have a sprinkler?,C. Grounded + validated,,True,0,0,0,2.68,False
+Q27,trap,Which spaces contain a fire extinguisher?,A. LLM only,Reception Break Room,False,2,0,0,3.0,False
+Q27,trap,Which spaces contain a fire extinguisher?,B. Grounded,,True,0,0,0,2.73,False
+Q27,trap,Which spaces contain a fire extinguisher?,C. Grounded + validated,,True,0,0,0,2.73,False
+Q28,trap,Which spaces are in fire compartment C1?,A. LLM only,,True,0,0,0,11.64,False
+Q28,trap,Which spaces are in fire compartment C1?,B. Grounded,,True,0,0,0,2.68,False
+Q28,trap,Which spaces are in fire compartment C1?,C. Grounded + validated,,True,0,0,0,2.68,False
+Q29,trap,Which rooms on the second floor have no smoke detector?,A. LLM only,,True,0,0,0,2.85,False
+Q29,trap,Which rooms on the second floor have no smoke detector?,B. Grounded,,True,0,0,0,2.69,False
+Q29,trap,Which rooms on the second floor have no smoke detector?,C. Grounded + validated,,True,0,0,0,2.69,False
+Q30,trap,Which smoke detector is installed in Room 104?,A. LLM only,,True,0,0,0,2.7,False
+Q30,trap,Which smoke detector is installed in Room 104?,B. Grounded,,True,0,0,0,2.73,False
+Q30,trap,Which smoke detector is installed in Room 104?,C. Grounded + validated,,True,0,0,0,2.73,False

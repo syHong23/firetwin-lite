@@ -74,16 +74,24 @@ def exists(g: Graph, entity_id: str) -> bool:
     return (node(entity_id), None, None) in g
 
 
+def ids_from_sparql(g: Graph, sparql: str | None) -> set[str]:
+    """IDs returned by a SPARQL query (empty set for trap questions)."""
+    return {short(row[0]) for row in g.query(sparql)} if sparql else set()
+
+
+def compare(g: Graph, answer_ids: list[str], expected: set[str]) -> dict:
+    """Compare the IDs given by the LLM with the expected IDs.
+    Returns the problems (feedback sentences) and counts of each kind of error."""
+    given = set(answer_ids)
+    invented = sorted(i for i in given - expected if not exists(g, i))
+    wrong = sorted(i for i in given - expected if exists(g, i))
+    missing = sorted(expected - given)
+    problems = [f"{i} does not exist in the building: remove it." for i in invented]
+    problems += [f"{describe(g, i)}, so it does not answer the question: remove it." for i in wrong]
+    problems += [f"{describe(g, i)}, and it is missing: add it." for i in missing]
+    return {"problems": problems, "invented": len(invented), "wrong": len(wrong), "missing": len(missing)}
+
+
 def check(g: Graph, answer_ids: list[str], query_name: str | None) -> list[str]:
     """Return a list of problems; an empty list means the answer is valid."""
-    expected = expected_ids(g, query_name)
-    given = set(answer_ids)
-    problems = []
-    for entity_id in sorted(given - expected):
-        if exists(g, entity_id):
-            problems.append(f"{describe(g, entity_id)}, so it does not answer the question: remove it.")
-        else:
-            problems.append(f"{entity_id} does not exist in the building: remove it.")
-    for entity_id in sorted(expected - given):
-        problems.append(f"{describe(g, entity_id)}, and it is missing: add it.")
-    return problems
+    return compare(g, answer_ids, expected_ids(g, query_name))["problems"]

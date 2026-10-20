@@ -9,18 +9,20 @@ import urllib.request
 
 OLLAMA_URL = "http://localhost:11434/api/chat"
 DEFAULT_MODEL = "llama3.1:8b"
+MAX_TOKENS = 512   # stops endless generation (a known JSON-mode issue)
+TIMEOUT = 120      # seconds
 
 
 def chat(messages: list[dict], model: str = DEFAULT_MODEL, json_mode: bool = False) -> str:
     """Send a whole conversation (system, user and assistant turns) and return the reply."""
     payload = {"model": model, "messages": messages, "stream": False,
-               "options": {"temperature": 0}}
+               "options": {"temperature": 0, "num_predict": MAX_TOKENS}}
     if json_mode:
         payload["format"] = "json"
     request = urllib.request.Request(
         OLLAMA_URL, data=json.dumps(payload).encode("utf-8"),
         headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(request, timeout=300) as response:
+    with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
         data = json.loads(response.read().decode("utf-8"))
     return data["message"]["content"]
 
