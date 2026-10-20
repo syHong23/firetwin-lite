@@ -1,0 +1,7 @@
+# IDs of rooms without a smoke detector
+PREFIX bot: <https://w3id.org/bot#>
+PREFIX ftl: <https://example.org/firetwin#>
+SELECT ?id WHERE {
+  ?id a ftl:Room .
+  FILTER NOT EXISTS { ?id bot:containsElement ?d . ?d a ftl:SmokeDetector . }
+}

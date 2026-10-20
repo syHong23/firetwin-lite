@@ -11,13 +11,8 @@ OLLAMA_URL = "http://localhost:11434/api/chat"
 DEFAULT_MODEL = "llama3.1:8b"
 
 
-def ask(question: str, system: str | None = None, model: str = DEFAULT_MODEL,
-        json_mode: bool = False) -> str:
-    """Send one question to the local LLM and return its answer as text."""
-    messages = []
-    if system:
-        messages.append({"role": "system", "content": system})
-    messages.append({"role": "user", "content": question})
+def chat(messages: list[dict], model: str = DEFAULT_MODEL, json_mode: bool = False) -> str:
+    """Send a whole conversation (system, user and assistant turns) and return the reply."""
     payload = {"model": model, "messages": messages, "stream": False,
                "options": {"temperature": 0}}
     if json_mode:
@@ -28,3 +23,11 @@ def ask(question: str, system: str | None = None, model: str = DEFAULT_MODEL,
     with urllib.request.urlopen(request, timeout=300) as response:
         data = json.loads(response.read().decode("utf-8"))
     return data["message"]["content"]
+
+
+def ask(question: str, system: str | None = None, model: str = DEFAULT_MODEL,
+        json_mode: bool = False) -> str:
+    """Send one question to the local LLM and return its answer as text."""
+    messages = [{"role": "system", "content": system}] if system else []
+    messages.append({"role": "user", "content": question})
+    return chat(messages, model=model, json_mode=json_mode)

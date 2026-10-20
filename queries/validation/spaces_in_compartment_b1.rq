@@ -1,0 +1,4 @@
+# IDs of the spaces in compartment B1
+PREFIX ftl: <https://example.org/firetwin#>
+PREFIX b:   <https://example.org/firetwin/building#>
+SELECT ?id WHERE { ?id ftl:inCompartment b:CompB1 . }

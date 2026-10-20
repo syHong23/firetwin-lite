@@ -1,0 +1,3 @@
+# IDs of the evacuation exits
+PREFIX ftl: <https://example.org/firetwin#>
+SELECT ?id WHERE { ?id a ftl:EvacuationExit . }
