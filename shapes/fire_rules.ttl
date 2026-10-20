@@ -40,3 +40,25 @@ fr:StairwellHasSmokeDetector a sh:NodeShape ;
         sh:qualifiedMinCount 1 ;
         sh:message "Stairwell without a smoke detector." ;
     ] .
+
+
+# Rule 5: a fire compartment stays on one storey.
+# Exception: a protected stairwell is a vertical compartment by design,
+# so stairwell spaces are ignored by this rule.
+fr:CompartmentOnOneStorey a sh:NodeShape ;
+    sh:targetClass ftl:FireCompartment ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "Fire compartment spans several storeys." ;
+        sh:select """
+            SELECT DISTINCT $this WHERE {
+                ?space1 <https://example.org/firetwin#inCompartment> $this .
+                ?space2 <https://example.org/firetwin#inCompartment> $this .
+                ?storey1 <https://w3id.org/bot#hasSpace> ?space1 .
+                ?storey2 <https://w3id.org/bot#hasSpace> ?space2 .
+                FILTER (?storey1 != ?storey2)
+                FILTER NOT EXISTS { ?space1 a <https://example.org/firetwin#Stairwell> }
+                FILTER NOT EXISTS { ?space2 a <https://example.org/firetwin#Stairwell> }
+            }
+        """ ;
+    ] .

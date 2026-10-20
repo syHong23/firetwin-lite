@@ -1,6 +1,6 @@
-# Which spaces are in Compartment B? (useful when a fire starts there)
+# Which spaces are in compartment B1 (first floor, east)? Useful when a fire starts there.
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX ftl:  <https://example.org/firetwin#>
 PREFIX b:    <https://example.org/firetwin/building#>
-SELECT ?label WHERE { ?space ftl:inCompartment b:CompB ; rdfs:label ?label . }
+SELECT ?label WHERE { ?space ftl:inCompartment b:CompB1 ; rdfs:label ?label . }
 ORDER BY ?label

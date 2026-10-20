@@ -13,21 +13,24 @@ b:S0 a bot:Storey ; rdfs:label "Ground floor" ;
 b:S1 a bot:Storey ; rdfs:label "First floor" ;
     bot:hasSpace b:Room101, b:Room102, b:Room103, b:Corridor1, b:Stair1 .
 
-b:CompA a ftl:FireCompartment ; rdfs:label "Compartment A (west)" .
-b:CompB a ftl:FireCompartment ; rdfs:label "Compartment B (east)" .
+# Fire compartments are defined per storey (one compartment does not span floors)
+b:CompA0 a ftl:FireCompartment ; rdfs:label "Compartment A0 (ground, west)" .
+b:CompB0 a ftl:FireCompartment ; rdfs:label "Compartment B0 (ground, east)" .
+b:CompA1 a ftl:FireCompartment ; rdfs:label "Compartment A1 (first, west)" .
+b:CompB1 a ftl:FireCompartment ; rdfs:label "Compartment B1 (first, east)" .
 # Stairwells are escape routes: modelled as a separate protected compartment
 b:CompStair a ftl:FireCompartment ; rdfs:label "Protected stairwell" .
 
-b:Lobby     a ftl:Room      ; rdfs:label "Lobby"      ; ftl:inCompartment b:CompA .
-b:Room001   a ftl:Room      ; rdfs:label "Room 001"   ; ftl:inCompartment b:CompA .
-b:Room002   a ftl:Room      ; rdfs:label "Room 002"   ; ftl:inCompartment b:CompB .
-b:Corridor0 a ftl:Corridor  ; rdfs:label "Corridor 0" ; ftl:inCompartment b:CompA .
+b:Lobby     a ftl:Room      ; rdfs:label "Lobby"      ; ftl:inCompartment b:CompA0 .
+b:Room001   a ftl:Room      ; rdfs:label "Room 001"   ; ftl:inCompartment b:CompA0 .
+b:Room002   a ftl:Room      ; rdfs:label "Room 002"   ; ftl:inCompartment b:CompB0 .
+b:Corridor0 a ftl:Corridor  ; rdfs:label "Corridor 0" ; ftl:inCompartment b:CompA0 .
 # Stairwells belong to the protected stairwell compartment
 b:Stair0    a ftl:Stairwell ; rdfs:label "Stairwell (ground)" ; ftl:inCompartment b:CompStair .
-b:Room101   a ftl:Room      ; rdfs:label "Room 101"   ; ftl:inCompartment b:CompA .
-b:Room102   a ftl:Room      ; rdfs:label "Room 102"   ; ftl:inCompartment b:CompB .
-b:Room103   a ftl:Room      ; rdfs:label "Room 103"   ; ftl:inCompartment b:CompB .
-b:Corridor1 a ftl:Corridor  ; rdfs:label "Corridor 1" ; ftl:inCompartment b:CompB .
+b:Room101   a ftl:Room      ; rdfs:label "Room 101"   ; ftl:inCompartment b:CompA1 .
+b:Room102   a ftl:Room      ; rdfs:label "Room 102"   ; ftl:inCompartment b:CompB1 .
+b:Room103   a ftl:Room      ; rdfs:label "Room 103"   ; ftl:inCompartment b:CompB1 .
+b:Corridor1 a ftl:Corridor  ; rdfs:label "Corridor 1" ; ftl:inCompartment b:CompB1 .
 b:Stair1    a ftl:Stairwell ; rdfs:label "Stairwell (first)" ; ftl:inCompartment b:CompStair .
 
 b:Lobby ftl:connectsTo b:Corridor0 .

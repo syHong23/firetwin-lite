@@ -18,7 +18,7 @@ def main() -> None:
 
     show("Rooms without a smoke detector", run_query(g, "rooms_without_smoke_detector"))
     show("Fire detectors per storey", run_query(g, "detectors_per_storey"))
-    show("Spaces in compartment B", run_query(g, "spaces_in_compartment"))
+    show("Spaces in compartment B1", run_query(g, "spaces_in_compartment"))
     show("Evacuation exits", run_query(g, "exits"))
     show("Sensors WITHOUT reasoning", run_query(plain, "all_sensors"))
     show("Sensors WITH reasoning", run_query(g, "all_sensors"))
