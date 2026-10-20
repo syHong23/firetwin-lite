@@ -58,9 +58,22 @@ b:Corridor1 bot:containsElement b:SD_C1, b:MCP_1 .
 b:Stair0    bot:containsElement b:SD_S0 .
 b:Stair1    bot:containsElement b:SD_S1 .
 
+# Fire doors between compartments, linked to both spaces with bot:adjacentElement
+b:Room002   bot:adjacentElement b:FD_002 .
+b:Corridor0 bot:adjacentElement b:FD_002, b:FD_S0 .
+b:Stair0    bot:adjacentElement b:FD_S0 .
+b:Stair1    bot:adjacentElement b:FD_S1 .
+b:Corridor1 bot:adjacentElement b:FD_S1, b:FD_101 .
+b:Room101   bot:adjacentElement b:FD_101 .
+
 b:SD_Lobby a ftl:SmokeDetector . b:SD_001 a ftl:SmokeDetector . b:SD_002 a ftl:SmokeDetector .
 b:SD_C0 a ftl:SmokeDetector .   b:SD_101 a ftl:SmokeDetector . b:SD_102 a ftl:SmokeDetector .
 b:SD_C1 a ftl:SmokeDetector .   b:HD_102 a ftl:HeatDetector .  b:HD_103 a ftl:HeatDetector .
 b:MCP_0 a ftl:ManualCallPoint . b:MCP_1 a ftl:ManualCallPoint .
 # Stairwell smoke detectors
 b:SD_S0 a ftl:SmokeDetector . b:SD_S1 a ftl:SmokeDetector .
+# Fire doors
+b:FD_002 a ftl:FireDoor ; rdfs:label "Fire door Room 002 / Corridor 0" .
+b:FD_S0  a ftl:FireDoor ; rdfs:label "Fire door Corridor 0 / Stairwell" .
+b:FD_S1  a ftl:FireDoor ; rdfs:label "Fire door Stairwell / Corridor 1" .
+b:FD_101 a ftl:FireDoor ; rdfs:label "Fire door Room 101 / Corridor 1" .

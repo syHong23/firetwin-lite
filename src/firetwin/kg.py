@@ -39,5 +39,6 @@ def check_rules(g: Graph) -> tuple[bool, list[str]]:
     SELECT ?node ?msg WHERE { ?r a sh:ValidationResult ; sh:focusNode ?node ; sh:resultMessage ?msg . }
     ORDER BY ?node
     """
-    problems = [f"{node.split('#')[-1]}: {msg}" for node, msg in report.query(query)]
+    base = "https://example.org/firetwin/building#"
+    problems = [f"{node.split('#')[-1]}: {str(msg).replace(base, '')}" for node, msg in report.query(query)]
     return conforms, problems

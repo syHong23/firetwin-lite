@@ -41,7 +41,6 @@ fr:StairwellHasSmokeDetector a sh:NodeShape ;
         sh:message "Stairwell without a smoke detector." ;
     ] .
 
-
 # Rule 5: a fire compartment stays on one storey.
 # Exception: a protected stairwell is a vertical compartment by design,
 # so stairwell spaces are ignored by this rule.
@@ -59,6 +58,29 @@ fr:CompartmentOnOneStorey a sh:NodeShape ;
                 FILTER (?storey1 != ?storey2)
                 FILTER NOT EXISTS { ?space1 a <https://example.org/firetwin#Stairwell> }
                 FILTER NOT EXISTS { ?space2 a <https://example.org/firetwin#Stairwell> }
+            }
+        """ ;
+    ] .
+
+# Rule 6: two connected spaces in different fire compartments must be
+# separated by a fire door (adjacent to both spaces).
+fr:FireDoorBetweenCompartments a sh:NodeShape ;
+    sh:targetClass bot:Space ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "Connection to {?other} crosses compartments without a fire door." ;
+        sh:select """
+            SELECT DISTINCT $this ?other WHERE {
+                $this <https://example.org/firetwin#connectsTo> ?other .
+                $this <https://example.org/firetwin#inCompartment> ?c1 .
+                ?other <https://example.org/firetwin#inCompartment> ?c2 .
+                FILTER (?c1 != ?c2)
+                FILTER (STR($this) < STR(?other))
+                FILTER NOT EXISTS {
+                    ?door a <https://example.org/firetwin#FireDoor> .
+                    $this <https://w3id.org/bot#adjacentElement> ?door .
+                    ?other <https://w3id.org/bot#adjacentElement> ?door .
+                }
             }
         """ ;
     ] .

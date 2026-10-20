@@ -28,6 +28,10 @@ ftl:HeatDetector  a owl:Class ; rdfs:subClassOf ftl:FireDetector .
 ftl:ManualCallPoint a owl:Class ; rdfs:subClassOf ftl:FireSafetyEquipment ;
     rdfs:comment "Push-button alarm activated by occupants." .
 ftl:EvacuationExit a owl:Class ; rdfs:subClassOf bot:Element .
+# Fire door: a door that keeps fire and smoke inside a compartment.
+# It is linked to the two spaces it separates with bot:adjacentElement.
+ftl:FireDoor a owl:Class ; rdfs:subClassOf ftl:FireSafetyEquipment ;
+    rdfs:comment "Fire-resisting door between two fire compartments." .
 
 # ---------- Relations ----------
 ftl:connectsTo a owl:ObjectProperty, owl:SymmetricProperty ;
