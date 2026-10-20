@@ -8,7 +8,7 @@ def test_room_without_smoke_detector_is_found():
 
 def test_reasoning_infers_sensors():
     assert run_query(load_graph(reason=False), "all_sensors") == []
-    assert len(run_query(load_graph(reason=True), "all_sensors")) == 9
+    assert len(run_query(load_graph(reason=True), "all_sensors")) == 11
 
 
 def test_shacl_flags_only_room_103():

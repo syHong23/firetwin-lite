@@ -15,17 +15,20 @@ b:S1 a bot:Storey ; rdfs:label "First floor" ;
 
 b:CompA a ftl:FireCompartment ; rdfs:label "Compartment A (west)" .
 b:CompB a ftl:FireCompartment ; rdfs:label "Compartment B (east)" .
+# Stairwells are escape routes: modelled as a separate protected compartment
+b:CompStair a ftl:FireCompartment ; rdfs:label "Protected stairwell" .
 
 b:Lobby     a ftl:Room      ; rdfs:label "Lobby"      ; ftl:inCompartment b:CompA .
 b:Room001   a ftl:Room      ; rdfs:label "Room 001"   ; ftl:inCompartment b:CompA .
 b:Room002   a ftl:Room      ; rdfs:label "Room 002"   ; ftl:inCompartment b:CompB .
 b:Corridor0 a ftl:Corridor  ; rdfs:label "Corridor 0" ; ftl:inCompartment b:CompA .
-b:Stair0    a ftl:Stairwell ; rdfs:label "Stairwell (ground)" .
+# Stairwells belong to the protected stairwell compartment
+b:Stair0    a ftl:Stairwell ; rdfs:label "Stairwell (ground)" ; ftl:inCompartment b:CompStair .
 b:Room101   a ftl:Room      ; rdfs:label "Room 101"   ; ftl:inCompartment b:CompA .
 b:Room102   a ftl:Room      ; rdfs:label "Room 102"   ; ftl:inCompartment b:CompB .
 b:Room103   a ftl:Room      ; rdfs:label "Room 103"   ; ftl:inCompartment b:CompB .
 b:Corridor1 a ftl:Corridor  ; rdfs:label "Corridor 1" ; ftl:inCompartment b:CompB .
-b:Stair1    a ftl:Stairwell ; rdfs:label "Stairwell (first)" .
+b:Stair1    a ftl:Stairwell ; rdfs:label "Stairwell (first)" ; ftl:inCompartment b:CompStair .
 
 b:Lobby ftl:connectsTo b:Corridor0 .
 b:Room001 ftl:connectsTo b:Corridor0 .
@@ -48,8 +51,13 @@ b:Room101   bot:containsElement b:SD_101 .
 b:Room102   bot:containsElement b:HD_102, b:SD_102 .
 b:Room103   bot:containsElement b:HD_103 .
 b:Corridor1 bot:containsElement b:SD_C1, b:MCP_1 .
+# Smoke detectors in stairwells (required by SHACL rule 4)
+b:Stair0    bot:containsElement b:SD_S0 .
+b:Stair1    bot:containsElement b:SD_S1 .
 
 b:SD_Lobby a ftl:SmokeDetector . b:SD_001 a ftl:SmokeDetector . b:SD_002 a ftl:SmokeDetector .
 b:SD_C0 a ftl:SmokeDetector .   b:SD_101 a ftl:SmokeDetector . b:SD_102 a ftl:SmokeDetector .
 b:SD_C1 a ftl:SmokeDetector .   b:HD_102 a ftl:HeatDetector .  b:HD_103 a ftl:HeatDetector .
 b:MCP_0 a ftl:ManualCallPoint . b:MCP_1 a ftl:ManualCallPoint .
+# Stairwell smoke detectors
+b:SD_S0 a ftl:SmokeDetector . b:SD_S1 a ftl:SmokeDetector .

@@ -30,3 +30,13 @@ fr:SpaceOneCompartment a sh:NodeShape ;
     sh:targetClass ftl:Room, ftl:Corridor ;
     sh:property [ sh:path ftl:inCompartment ; sh:maxCount 1 ;
                   sh:message "Space assigned to several compartments." ] .
+
+# Rule 4: stairwells are escape routes, so each must contain a smoke detector.
+fr:StairwellHasSmokeDetector a sh:NodeShape ;
+    sh:targetClass ftl:Stairwell ;
+    sh:property [
+        sh:path bot:containsElement ;
+        sh:qualifiedValueShape [ sh:class ftl:SmokeDetector ] ;
+        sh:qualifiedMinCount 1 ;
+        sh:message "Stairwell without a smoke detector." ;
+    ] .
