@@ -5,9 +5,12 @@ Temperature is 0 so that the same question gives the same answer
 (reproducibility matters when we compare conditions later).
 """
 import json
+import os
 import urllib.request
 
-OLLAMA_URL = "http://localhost:11434/api/chat"
+# Where Ollama runs. In Docker, OLLAMA_HOST points to the host machine (see docker-compose.yml).
+OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
+OLLAMA_URL = f"{OLLAMA_HOST}/api/chat"
 DEFAULT_MODEL = "llama3.1:8b"
 MAX_TOKENS = 512   # stops endless generation (a known JSON-mode issue)
 TIMEOUT = 120      # seconds

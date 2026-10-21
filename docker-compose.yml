@@ -1,0 +1,13 @@
+# Run the FireTwin-Lite API in a container.
+# The LLM stays in Ollama on the host machine (no second copy of the model in Docker).
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      OLLAMA_HOST: http://host.docker.internal:11434
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./docs:/app/docs   # keep the audit log on the host

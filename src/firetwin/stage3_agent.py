@@ -9,7 +9,7 @@ from langchain_ollama import ChatOllama
 from langgraph.prebuilt import create_react_agent
 
 from firetwin.agent_tools import evacuation_route, space_info
-from firetwin.llm import DEFAULT_MODEL
+from firetwin.llm import DEFAULT_MODEL, OLLAMA_HOST
 
 INSTRUCTIONS = """You are an evacuation assistant for one office building.
 Never invent a route: always call the evacuation_route tool and report its result faithfully.
@@ -25,7 +25,7 @@ SCENARIOS = [
 
 
 def build_agent():
-    model = ChatOllama(model=DEFAULT_MODEL, temperature=0)
+    model = ChatOllama(model=DEFAULT_MODEL, temperature=0, base_url=OLLAMA_HOST)
     return create_react_agent(model, [evacuation_route, space_info], state_modifier=INSTRUCTIONS)
 
 
