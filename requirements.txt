@@ -3,3 +3,7 @@ owlrl==7.1.2
 pyshacl==0.30.0
 pytest==8.3.4
 networkx==3.4.2
+langgraph==0.2.60
+langchain-core==0.3.29
+langchain-ollama==0.2.2
+ollama==0.4.7
