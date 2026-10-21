@@ -1,4 +1,4 @@
-# Run the FireTwin-Lite API in a container.
+# Run the FireTwin-Lite services in containers.
 # The LLM stays in Ollama on the host machine (no second copy of the model in Docker).
 services:
   api:
@@ -11,3 +11,10 @@ services:
       - "host.docker.internal:host-gateway"
     volumes:
       - ./docs:/app/docs   # keep the audit log on the host
+
+  mosquitto:               # MQTT broker for the simulated detectors
+    image: eclipse-mosquitto:2.0.20
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
