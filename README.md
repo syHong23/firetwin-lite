@@ -1,14 +1,35 @@
 # FireTwin-Lite
 
+[![CI](https://github.com/syHong23/firetwin-lite/actions/workflows/ci.yml/badge.svg)](https://github.com/syHong23/firetwin-lite/actions/workflows/ci.yml)
+
 Ontology-grounded LLM agents for fire safety in a small building: a scaled-down prototype of neuro-symbolic decision support for building digital twins.
 
 The idea: an LLM should not decide alone. Its answers about a building (where are the detectors? which exit is safe?) are grounded in a knowledge graph and **checked by symbolic rules before they are used**.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    D[Simulated detectors] -- MQTT --> B[(Mosquitto)]
+    B --> M[Monitor: fire alarm and drift]
+    U[User question] --> API[FastAPI]
+    API --> A[LangGraph agent: llama3.1 via Ollama]
+    A -- tool call --> T[Evacuation tool]
+    A --> G[Guard: answer vs tool result]
+    KG[(Knowledge graph: BOT, SOSA, FireTwin ontology)] --> T
+    KG --> M
+    KG --> V[SHACL rules]
+    G --> L[Audit log]
+    M --> L
+```
+
+Design principle: **the LLM interprets and explains, the symbolic layer decides.** Routes, rule checks and alarm decisions are computed from the knowledge graph; LLM outputs are validated before they are delivered.
 
 ## Roadmap
 
 - [x] **Stage 1 – Knowledge graph**: fire-safety ontology on top of BOT and SOSA, a two-storey building, SPARQL queries, OWL 2 RL reasoning, six SHACL rules
 - [x] **Stage 2 – Grounded LLM**: local open-weight LLM (Ollama), grounding in knowledge-graph facts, ontology-aware symbolic validation of answers, evaluation (LLM only vs grounded vs grounded + validated)
-- [ ] **Stage 3 – Agents and platform**: LangGraph agents (evacuation, maintenance), simulated detectors over MQTT, FastAPI, Docker Compose
+- [x] **Stage 3 – Agents and platform**: symbolic evacuation tool, LangGraph agent with a guard node and an audit log, simulated detectors over MQTT with fire alarms and drift detection, FastAPI, Docker Compose, GitHub Actions CI
 
 ## Stage 1: what it does
 
@@ -58,6 +79,25 @@ The first version of the building was deliberately simple. Rules were then added
 
 **Limitations.** One model, one run, one feedback round, a small synthetic building; ground truth and facts come from the same knowledge graph.
 
+## Stage 3: agents and platform
+
+**Evacuation tool** (`evacuation.py`): routes are computed on the graph of connected spaces, avoiding the compartment on fire (an occupant already inside it may cross it to get out). Three outcomes: `exit`, `refuge` (protected stairwell) or `trapped`. Running all scenarios revealed a design flaw of the example building: both exits are in compartment A0, so a fire there leaves first-floor occupants with no exit.
+
+**LangGraph agent with a guard** (`stage3_agent.py`, `stage3_guarded.py`, `guard.py`): a ReAct agent calls the evacuation tool and explains its result; a guard node checks the final answer against the tool result (decision, route, forbidden claims) and delivers the tool result when the answer is not faithful. Every decision goes to `docs/audit_log.jsonl`.
+
+| Scenario | Tool result | Unguarded LLM answer | Delivered |
+|---|---|---|---|
+| Fire in B1, Room 103 | exit | correct | LLM answer |
+| Fire in B1, Room 101 | trapped | "The situation has not changed." | tool result |
+| Fire in A0, Room 102 | refuge | "The fire has been extinguished. You can return to Room102." | tool result |
+| No fire, Room 001 | exit | correct but different wording | tool result (false positive, safe) |
+
+The agent called the tool correctly every time, yet its final answer was unfaithful when the outcome was bad. The lexical guard is conservative (safe false positives); validating a structured decision rather than free text would be more robust.
+
+**IoT monitoring** (`simulate.py`, `monitor.py`): simulated smoke and heat detectors publish readings over MQTT. The monitor raises a fire alarm after two consecutive readings above threshold, finds the detector's space and compartment in the knowledge graph, and computes evacuation decisions for every room. A slow, steady rise without fire is reported as possible sensor drift; a fast rise is never filed as maintenance, so a starting fire cannot be mistaken for a faulty sensor. Thresholds are illustrative.
+
+**Platform**: FastAPI (`/health`, `/spaces/{id}`, `/route`, `/rules`, `/ask`), Docker Compose (API and Mosquitto; the LLM stays in Ollama on the host), GitHub Actions running the tests, building the image and smoke-testing the container on every push.
+
 ## Run
 
 ```bash
@@ -65,11 +105,19 @@ python -m venv .venv
 # Windows: .venv\Scripts\activate    macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt
 python -m pip install -e .
-python -m firetwin.stage1
-pytest
+pytest                                   # 45 tests, no LLM needed
 ```
 
-Expected SHACL result: one violation, `Room103: Room without a smoke detector.` Tests: `8 passed`.
+| Command | What it does | Needs |
+|---|---|---|
+| `python -m firetwin.stage1` | Queries, reasoning and SHACL validation | – |
+| `python -m firetwin.evaluate` | 30-question evaluation of the three conditions | Ollama (`ollama pull llama3.1:8b`) |
+| `python -m firetwin.stage3_guarded` | Guarded evacuation agent on four scenarios | Ollama |
+| `uvicorn firetwin.api:app --reload` | REST API, docs at http://127.0.0.1:8000/docs | Ollama for `/ask` only |
+| `docker compose up --build` | API and MQTT broker in containers | Docker |
+| `python -m firetwin.monitor` then `python -m firetwin.simulate` | Detector simulation and fire/drift monitoring | MQTT broker (`docker compose up mosquitto`) |
+
+Expected SHACL result: one violation, `Room103: Room without a smoke detector.` (kept on purpose).
 
 ## Data and sources
 
